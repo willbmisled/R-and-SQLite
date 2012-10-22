@@ -5,8 +5,6 @@ This repository contains R code and data that accompanies tutorials available at
 
 The code might not appear exactly as it appeared in the tutorials.  The code here has more annotations than the corresponding code in the tutorials. 
 
-The code uses the R packages: `RSQLite`^1, `DBI`^2 and `sqldf`^3 for database functionality; and the `XLConnect`^4 package to read Excel files. 
-
 
 
 
