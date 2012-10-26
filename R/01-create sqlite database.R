@@ -95,7 +95,7 @@ dbListTables(db)                 # The tables in the database
 dbListFields(db, "School")       # The columns in a table
 dbReadTable(db, "School")        # The data in a table
 
-# Another solution is to use sqldf to import the csv files - see SEGMENT 7 below.
+# Another l is to use sqldf to import the csv files - see SEGMENT 7 below.
 # See: http://stackoverflow.com/a/4335739/419994
 
 
