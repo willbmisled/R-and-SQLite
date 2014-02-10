@@ -75,25 +75,33 @@ dbReadTable(db, "School")                # The data in a table; or,
 dbGetQuery(db, "SELECT * from School")   # The data in a table
 
 # Note the entries for SchSize. 
-# I think the problem is to do with line endings.
-# One solution is to read the csv file into R as dataframes,
-# then import the dataframes into the database. 
+# The problem is to do with line endings.
+# The file was an Excel spreadsheet saved as a csv file.
+# The MS-DOS line delimiters are "\r\n", 
+# whereas the Unix-style line delimiter is "\n"  
+#(see Adler, J. (2012). R in a Nutshell (2nd Ed.), O'Reilly Media, p.149).
+# In RSQLite, the default is "\n", but it can be changed by specifying eol = "\r\n"
+
 dbRemoveTable(db, "School")   # Remove the tables
 dbRemoveTable(db, "Class")
 dbRemoveTable(db, "Student")
 
-School <- read.csv("school.csv")  # Read csv files into R
-Class <- read.csv("class.csv")
-Student <- read.csv("student.csv")
+dbWriteTable(conn = db, name = "Student", value = "student.csv", eol = "\r\n",  row.names = FALSE, header = TRUE)
+dbWriteTable(conn = db, name = "Class", value = "class.csv", eol = "\r\n", row.names = FALSE, header = TRUE)
+dbWriteTable(conn = db, name = "School", value = "school.csv", eol = "\r\n", row.names = FALSE, header = TRUE)
 
-# Import dataframes into database
-dbWriteTable(conn = db, name = "Student", value = Student, row.names = FALSE)
-dbWriteTable(conn = db, name = "Class", value = Class, row.names = FALSE)
+dbReadTable(db, "School")                # The data in the school table
+
+
+# Alternatively, one can read the csv files into R as dataframes,
+# then import the dataframes into the database. 
+dbRemoveTable(db, "School")   # Remove the school table
+School <- read.csv("school.csv")  # Read csv files into R
+
+# Import dataframe into database
 dbWriteTable(conn = db, name = "School", value = School, row.names = FALSE)
 
-dbListTables(db)                 # The tables in the database
-dbListFields(db, "School")       # The columns in a table
-dbReadTable(db, "School")        # The data in a table
+dbReadTable(db, "School")        # The data in the school table
 
 # Another solution is to use sqldf to import the csv files - see SEGMENT 7 below.
 # See: http://stackoverflow.com/a/4335739/419994
@@ -168,7 +176,4 @@ with(Tables, {
 sqldf("select * from sqlite_master", dbname = "Test2.sqlite")$tbl_name  # Tables in the database
 sqldf("pragma table_info(School)", dbname = "Test2.sqlite")$name        # Columns in the School table
 sqldf("select * from School", dbname = "Test2.sqlite")                  # Data in the School table
-
-
-
 
